@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --navy: #1B2A4A;
+    --navy-light: #2C3F66;
+    --bg: #F5F3EF;
+    --sage: #2F7A5E;
+    --sage-light: #E4F0EB;
+    --brick: #C9432E;
+    --brick-light: #FBEAE7;
+    --slate: #6B7280;
+    --white: #FFFFFF;
+    --border: #E4E1D9;
+}
+
+body {
+    background-color: var(--bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+}
+
+h1, h2, h3, h4, h5, .navbar-brand {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+}
+
+/* Barre de navigation simple, réutilisable en haut de chaque page */
+.ats-topbar {
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px 0;
+    margin-bottom: 40px;
+}
+.ats-topbar a {
+    color: var(--white);
+    text-decoration: none;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+.ats-topbar .nav-links a {
+    color: #C9D3E0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-left: 22px;
+}
+.ats-topbar .nav-links a:hover {
+    color: var(--white);
+}
+
+/* Cartes */
+.card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(27,42,74,0.04);
+}
+.card-title {
+    font-family: 'Sora', sans-serif;
+}
+
+/* Boutons */
+.btn-primary {
+    background-color: var(--navy);
+    border-color: var(--navy);
+    font-weight: 600;
+}
+.btn-primary:hover {
+    background-color: var(--navy-light);
+    border-color: var(--navy-light);
+}
+.btn-success {
+    background-color: var(--sage);
+    border-color: var(--sage);
+    font-weight: 600;
+}
+.btn-success:hover {
+    background-color: #256349;
+    border-color: #256349;
+}
+.btn-outline-primary {
+    color: var(--navy);
+    border-color: var(--navy);
+    font-weight: 600;
+}
+.btn-outline-primary:hover {
+    background-color: var(--navy);
+    border-color: var(--navy);
+}
+.btn-outline-danger, .btn-outline-warning, .btn-outline-secondary {
+    font-weight: 600;
+}
+
+/* Tableau */
+.table thead {
+    background-color: var(--navy) !important;
+}
+table.table thead tr th {
+    background-color: var(--navy) !important;
+    color: #FFFFFF !important;
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border: none !important;
+    box-shadow: none !important;
+}
+.table-hover tbody tr:hover {
+    background-color: var(--sage-light);
+}
+
+
+#btn-envoyer:disabled {
+    opacity: 1;
+    background-color: var(--navy);
+    border-color: var(--navy);
+}
+/* Jauge de score — signature visuelle du projet */
+.score-jauge {
+    position: relative;
+    background: #E9E7E0;
+    border-radius: 6px;
+    height: 26px;
+    width: 140px;
+    overflow: hidden;
+}
+.score-jauge-remplissage {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    background: linear-gradient(90deg, var(--sage), #4C9C7D);
+    border-radius: 6px;
+}
+.score-jauge-valeur {
+    position: relative;
+    z-index: 2;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #FFFFFF;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.score-jauge.score-faible .score-jauge-remplissage {
+    background: linear-gradient(90deg, var(--brick), #DD6A55);
+}
+
+/* Médailles de rang */
+.rang-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--sage-light);
+    color: var(--sage);
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+.rang-badge.rang-1 { background: var(--navy); color: var(--white); }
+
+/* Cartes d'accueil */
+.hero-title {
+    font-size: 2.4rem;
+}
+.hero-subtitle {
+    color: var(--slate);
+    font-size: 1.05rem;
+}

@@ -1,0 +1,371 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Offres d'emploi — NeoMorIT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{% static 'matching/style.css' %}" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #142c54;
+            --navy-dark: #0c1d3a;
+            --blue: #3d8fd1;
+            --blue-light: #eaf3fb;
+        }
+
+        body {
+            background-color: #f5f8fb;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0 1.8rem;
+        }
+
+        .page-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .page-header img {
+            height: 42px;
+            width: auto;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--navy-dark);
+            margin: 0;
+        }
+
+        .page-header p {
+            color: #6b7690;
+            font-size: 0.88rem;
+            margin: 0.1rem 0 0;
+        }
+
+        .btn-navy {
+            background-color: var(--navy);
+            border-color: var(--navy);
+            color: #fff;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+
+        .btn-navy:hover {
+            background-color: var(--navy-dark);
+            border-color: var(--navy-dark);
+            color: #fff;
+        }
+
+        .btn-outline-navy {
+            border: 1px solid var(--navy);
+            color: var(--navy);
+            font-weight: 500;
+            border-radius: 8px;
+        }
+
+        .btn-outline-navy:hover {
+            background-color: var(--navy);
+            color: #fff;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1.8rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            color: #8a94a6;
+        }
+
+        .search-box input {
+            padding-left: 42px;
+            border-radius: 10px;
+            border: 1px solid #dfe3ea;
+            box-shadow: none;
+            height: 46px;
+        }
+
+        .search-box input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(61, 143, 209, 0.15);
+        }
+
+        .offer-card {
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(20, 30, 50, 0.06);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            height: 100%;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(20, 30, 50, 0.10);
+        }
+
+        .offer-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .badge-statut {
+            font-weight: 500;
+            font-size: 0.72rem;
+            padding: 0.4em 0.75em;
+            border-radius: 20px;
+            letter-spacing: 0.02em;
+        }
+
+        .badge-contrat {
+            font-size: 0.72rem;
+            font-weight: 500;
+            padding: 0.4em 0.7em;
+            border-radius: 20px;
+            background-color: var(--blue-light);
+            color: var(--navy);
+        }
+
+        .offer-title {
+            font-weight: 700;
+            font-size: 1.12rem;
+            color: var(--navy-dark);
+            margin: 0.6rem 0 0.3rem;
+        }
+
+        .offer-meta {
+            font-size: 0.82rem;
+            color: #8a94a6;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .offer-desc {
+            font-size: 0.88rem;
+            color: #4a5468;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 1.1rem;
+            min-height: 3.9em;
+        }
+
+        .offer-actions {
+            border-top: 1px solid #eef0f4;
+            padding-top: 0.9rem;
+        }
+
+        .btn-action {
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 1rem;
+            color: #8a94a6;
+        }
+
+        .empty-state i {
+            font-size: 2.6rem;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .spinner-navy {
+            color: var(--blue) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container py-3">
+
+        <div class="page-header">
+            <div class="page-header-left">
+                <img src="{% static 'matching/img/logo.jpg' %}" alt="NeoMorIT">
+                <div>
+                    <h1>Offres d'emploi</h1>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="/ajouter-offre/" class="btn btn-navy">
+                    <i class="bi bi-plus-lg me-1"></i>Nouvelle offre
+                </a>
+                <a href="/upload-cv/" class="btn btn-outline-navy">
+                    <i class="bi bi-upload me-1"></i>Déposer un CV
+                </a>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" id="recherche-offre" class="form-control" placeholder="Rechercher une offre par titre...">
+        </div>
+
+        <div id="liste-offres" class="row g-3">
+            <div class="text-center text-muted py-5">
+                <div class="spinner-border spinner-navy mb-2" role="status"></div>
+                <p>Chargement des offres...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        let toutesLesOffres = [];
+
+        const couleurStatut = { ouverte: 'success', fermee: 'secondary' };
+        const labelStatut = { ouverte: 'Ouverte', fermee: 'Fermée' };
+
+        function echapperHtml(texte) {
+            const div = document.createElement('div');
+            div.textContent = texte || '';
+            return div.innerHTML;
+        }
+
+        function afficherOffres(offres) {
+            const container = document.getElementById('liste-offres');
+            container.innerHTML = "";
+
+            if (offres.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state w-100">
+                        <i class="bi bi-inbox"></i>
+                        <p class="mb-0">Aucune offre ne correspond à la recherche.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            offres.forEach(offre => {
+                const statut = offre.statut || 'ouverte';
+                const contrat = offre.type_contrat || '';
+                const salaire = offre.salaire ? `<span class="offer-meta"><i class="bi bi-cash-coin"></i>${echapperHtml(offre.salaire)} MAD/mois</span>` : '';
+
+                const carte = `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card offer-card">
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <span class="badge bg-${couleurStatut[statut]} badge-statut">
+                                        ${labelStatut[statut]}
+                                    </span>
+                                    ${contrat ? `<span class="badge-contrat">${echapperHtml(contrat)}</span>` : ''}
+                                </div>
+
+                                <h5 class="offer-title">${echapperHtml(offre.titre)}</h5>
+
+                                <span class="offer-meta">
+                                    <i class="bi bi-people-fill"></i>
+                                    ${offre.nb_candidats} candidat${offre.nb_candidats > 1 ? 's' : ''}
+                                </span>
+                                ${salaire}
+
+                                <p class="offer-desc">${echapperHtml(offre.description)}</p>
+
+                                <div class="offer-actions mt-auto">
+                                    <div class="d-flex gap-2 mb-2">
+                                        <a href="/page-classement/${offre.id}/" class="btn btn-navy btn-action flex-fill">
+                                            Classement
+                                        </a>
+                                        <a href="/cvs/?offre=${offre.id}" class="btn btn-outline-navy btn-action flex-fill">
+                                            <i class="bi bi-file-earmark-person me-1"></i>CV
+                                        </a>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <a href="/modifier-offre/${offre.id}/" class="btn btn-outline-navy btn-action flex-fill">
+                                            <i class="bi bi-pencil-square me-1"></i>Modifier
+                                        </a>
+                                        <button class="btn btn-outline-danger icon-btn" onclick="supprimerOffre(${offre.id})" title="Supprimer">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += carte;
+            });
+        }
+
+        function chargerOffres() {
+            Promise.all([
+                fetch('/api/offres/').then(r => r.json()),
+                fetch('/api/cvs/').then(r => r.json())
+            ]).then(([offres, cvs]) => {
+                toutesLesOffres = offres.map(offre => {
+                    offre.nb_candidats = cvs.filter(cv => cv.offre === offre.id).length;
+                    return offre;
+                });
+                afficherOffres(toutesLesOffres);
+            }).catch(() => {
+                document.getElementById('liste-offres').innerHTML = `
+                    <div class="empty-state w-100">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <p class="mb-0">Impossible de charger les offres. Réessayez plus tard.</p>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById('recherche-offre').addEventListener('input', function (e) {
+            const terme = e.target.value.toLowerCase();
+            const filtrees = toutesLesOffres.filter(o => o.titre.toLowerCase().includes(terme));
+            afficherOffres(filtrees);
+        });
+
+        function supprimerOffre(offreId) {
+            if (!confirm("Supprimer cette offre ainsi que tous les CV et scores associés ?")) {
+                return;
+            }
+
+            fetch(`/api/offres/${offreId}/`, {
+                method: 'DELETE',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Échec de la suppression");
+                chargerOffres();
+            })
+            .catch(error => alert(error.message));
+        }
+
+        chargerOffres();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Candidats — NeoMorIT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{% static 'matching/style.css' %}" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #142c54;
+            --navy-dark: #0c1d3a;
+            --blue: #3d8fd1;
+            --blue-light: #eaf3fb;
+        }
+
+        body {
+            background-color: #f5f8fb;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0 1.6rem;
+        }
+
+        .page-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .page-header img {
+            height: 42px;
+            width: auto;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--navy-dark);
+            margin: 0;
+        }
+
+        .btn-outline-navy-sm {
+            border: 1px solid var(--navy);
+            color: var(--navy);
+            font-weight: 500;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .btn-outline-navy-sm:hover {
+            background-color: var(--navy);
+            color: #fff;
+        }
+
+        .list-card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(20, 44, 84, 0.07);
+        }
+
+        .list-card .card-body {
+            padding: 1.6rem;
+        }
+
+        table thead {
+            background-color: var(--navy) !important;
+        }
+
+        table th {
+            color: #fff !important;
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 600;
+            border: none !important;
+        }
+
+        table td {
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        .btn-sm.btn-outline-navy {
+            border: 1px solid var(--navy);
+            color: var(--navy);
+            border-radius: 7px;
+            font-size: 0.78rem;
+        }
+
+        .btn-sm.btn-outline-navy:hover {
+            background-color: var(--navy);
+            color: #fff;
+        }
+
+        .btn-sm.btn-outline-danger {
+            border-radius: 7px;
+            font-size: 0.78rem;
+        }
+
+        a.link-navy {
+            color: var(--blue);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        a.link-navy:hover {
+            text-decoration: underline;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #eef1f6;
+        }
+
+        .modal-title {
+            font-weight: 700;
+            color: var(--navy-dark);
+        }
+
+        .modal-body p {
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="page-header">
+            <div class="page-header-left">
+                <img src="{% static 'matching/img/logo.jpg' %}" alt="NeoMorIT">
+                <h1 id="titre-page">Candidats</h1>
+            </div>
+            <a href="/offres/" class="btn btn-outline-navy-sm">
+                Voir les offres
+            </a>
+        </div>
+
+        <div class="card list-card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Candidat</th>
+                                <th>Offre concernée</th>
+                                <th>Date d'upload</th>
+                                <th>Fichier</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableau-cvs">
+                            <tr><td colspan="6" class="text-center py-4 text-muted">Chargement...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="modalInfos" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalNomCandidat">Candidat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Email :</strong> <span id="modalEmail">—</span></p>
+                    <p><strong>Téléphone :</strong> <span id="modalTelephone">—</span></p>
+                    <p><strong>Adresse :</strong> <span id="modalAdresse">—</span></p>
+                    <p><strong>LinkedIn :</strong> <span id="modalLinkedin">—</span></p>
+                    <p><strong>GitHub :</strong> <span id="modalGithub">—</span></p>
+                    <p><strong>GitLab :</strong> <span id="modalGitlab">—</span></p>
+                    <p><strong>Portfolio :</strong> <span id="modalPortfolio">—</span></p>
+                    <p><strong>Behance :</strong> <span id="modalBehance">—</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const offreFiltre = params.get('offre');
+
+        let tousLesCvs = [];
+
+        function afficherInfos(cvId) {
+            const cv = tousLesCvs.find(c => c.id === cvId);
+            if (!cv) return;
+
+            document.getElementById('modalNomCandidat').textContent = cv.nom_candidat;
+
+            document.getElementById('modalEmail').innerHTML = cv.email
+                ? `<a href="mailto:${cv.email}" class="link-navy">${cv.email}</a>`
+                : "Non détecté";
+
+            document.getElementById('modalTelephone').innerHTML = cv.telephone
+                ? `<a href="tel:${cv.telephone}" class="link-navy">${cv.telephone}</a>`
+                : "Non détecté";
+
+            document.getElementById('modalAdresse').textContent = cv.adresse || "Non détectée";
+
+            document.getElementById('modalLinkedin').innerHTML = cv.linkedin
+                ? `<a href="${cv.linkedin}" target="_blank" class="link-navy">${cv.linkedin}</a>`
+                : "Non détecté";
+
+            document.getElementById('modalGithub').innerHTML = cv.github
+                ? `<a href="${cv.github}" target="_blank" class="link-navy">${cv.github}</a>`
+                : "Non détecté";
+
+            document.getElementById('modalGitlab').innerHTML = cv.gitlab
+                ? `<a href="${cv.gitlab}" target="_blank" class="link-navy">${cv.gitlab}</a>`
+                : "Non détecté";
+
+            document.getElementById('modalPortfolio').innerHTML = cv.portfolio
+                ? `<a href="${cv.portfolio.startsWith('http') ? cv.portfolio : 'https://' + cv.portfolio}" target="_blank" class="link-navy">${cv.portfolio}</a>`
+                : "Non détecté";
+
+            document.getElementById('modalBehance').innerHTML = cv.behance
+                ? `<a href="${cv.behance}" target="_blank" class="link-navy">${cv.behance}</a>`
+                : "Non détecté";
+
+            const modal = new bootstrap.Modal(document.getElementById('modalInfos'));
+            modal.show();
+        }
+
+        function chargerCvs() {
+            Promise.all([
+                fetch('/api/cvs/').then(r => r.json()),
+                fetch('/api/offres/').then(r => r.json())
+            ]).then(([cvs, offres]) => {
+                tousLesCvs = cvs;
+                const tbody = document.getElementById('tableau-cvs');
+                tbody.innerHTML = "";
+
+                let cvsAffiches = cvs;
+                if (offreFiltre) {
+                    cvsAffiches = cvs.filter(cv => cv.offre == offreFiltre);
+
+                    const offreCourante = offres.find(o => o.id == offreFiltre);
+                    if (offreCourante) {
+                        document.getElementById('titre-page').textContent = `Candidats — ${offreCourante.titre}`;
+                    }
+                }
+
+                if (cvsAffiches.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">Aucun CV pour cette offre.</td></tr>';
+                    return;
+                }
+
+                cvsAffiches.forEach(cv => {
+                    const offre = offres.find(o => o.id === cv.offre);
+                    const titreOffre = offre ? offre.titre : "—";
+
+                    const ligne = `
+                        <tr>
+                            <td class="fw-semibold">${cv.nom_candidat}</td>
+                            <td>${titreOffre}</td>
+                            <td>${new Date(cv.date_upload).toLocaleDateString('fr-FR')}</td>
+                            <td><a href="${cv.fichier}" target="_blank" class="link-navy">Voir le PDF</a></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-navy" onclick="afficherInfos(${cv.id})">
+                                    Voir infos
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-danger" onclick="supprimerCv(${cv.id})">
+                                    Supprimer
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += ligne;
+                });
+            });
+        }
+
+        function supprimerCv(cvId) {
+            if (!confirm("Supprimer ce CV et son score associé ?")) {
+                return;
+            }
+
+            fetch(`/api/cvs/${cvId}/`, {
+                method: 'DELETE',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Échec de la suppression");
+                chargerCvs();
+            })
+            .catch(error => alert(error.message));
+        }
+
+        chargerCvs();
+    </script>
+
+</body>
+</html>
